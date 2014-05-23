@@ -72,22 +72,40 @@ static int ldiscount__call(lua_State *L) {
   lua_remove(L, 1);
   return ldiscount(L);
 }
-
+#if LUA_VERSION_NUM > 501
+static const struct luaL_Reg ldiscount_meta[] = {
+#else
 static const struct luaL_reg ldiscount_meta[] = {
+#endif
   {"__call", ldiscount__call},
   {NULL, NULL}
 };
-
+#if LUA_VERSION_NUM > 501
+static const struct luaL_Reg ldiscount_funcs[] = {
+#else
 static const struct luaL_reg ldiscount_funcs[] = {
+#endif
   {"to_html", ldiscount},
   {NULL, NULL}
 };
 
+#ifdef WINDOWS
+__declspec(dllexport) int  luaopen_discount(lua_State *L) {
+#else
 LUALIB_API int luaopen_discount(lua_State *L) {
+#endif
   // Give the discount table a metatable
-  luaL_register(L, "discount", ldiscount_funcs);
-  lua_newtable(L);
-  luaL_register(L, NULL, ldiscount_meta);
-  lua_setmetatable(L, -2);
+#if LUA_VERSION_NUM > 501
+	luaL_newlib(L, ldiscount_funcs);
+	lua_newtable(L);
+	luaL_setfuncs(L, ldiscount_meta, 0);
+	lua_setmetatable(L, -2);
+#else
+	luaL_register(L, "discount", ldiscount_funcs);
+	lua_newtable(L);
+	luaL_register(L, NULL, ldiscount_meta);
+lua_setmetatable(L, -2);
+#endif
+
   return 1;
 }
