@@ -2,15 +2,14 @@ nuget {
 	nuspec {
 		id = lua-discount;
 		title: Lua Discount;
-		version: 1.3.1.1;
+		version: 1.3.1.2;
 		authors: {coapp, A.S. Bradbury, Andrew Starks, Tightrope Media Systems};
 		owners: {A.S. Bradbury};
 		licenseUrl: "http://asbradbury.org/projects/lua-discount/";
 		releaseNotes: {@"Initial release."}; 
 		requireLicenseAcceptance:false;
 		summary: "A Discount binding for Lua 5.1 / 5.2.";
-		copyright: "Discount is Copyright (C) 2007 David Loren Parsons; Lua Discount is Copyright (C) 2008 A.S. Bradbury,
-Copyright (C) 2008 Tim Channon.";
+		copyright: {"Discount is Copyright (C) 2007 David Loren Parsons -- Lua Discount is Copyright (C) 2008 A.S. Bradbury, Copyright (C) 2008 Tim Channon."};
 		tags: {native, Lua, module};
 		description: {
 @"A binding to Discount, a fast C implementation of the Markdown text to HTML markup system. Discount passes the Markdown test suite."};
@@ -20,13 +19,13 @@ dependencies {
         packages : {
             // This is a list of other NuGet packages required to use this package.
             // Each item follows the format "<pkg_name>/<version>"
-            lua/"[5.1, 5.3)",
+            lua/"[5.1, 5.4)",
         };
     };
 	files {
 		docs : {
 			#destination = {"${d_docs}\discount"};
-			{"doc\**\*"};
+			{".\README.mkd"};
 		};
 		[x64, v100] {
         	bin: {"x64\Release\*.dll"};
