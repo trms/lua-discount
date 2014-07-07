@@ -74,5 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="lua-discount.autopkg" />
   </ItemGroup>
 </Project>
