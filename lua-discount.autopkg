@@ -2,7 +2,7 @@ nuget {
 	nuspec {
 		id = lua-discount;
 		title: Lua Discount;
-		version: 1.3.1.4;
+		version: 1.3.1.5;
 		authors: {coapp, A.S. Bradbury, Andrew Starks, Tightrope Media Systems};
 		owners: {A.S. Bradbury};
 		licenseUrl: "http://asbradbury.org/projects/lua-discount/";
@@ -23,17 +23,48 @@ dependencies {
         };
     };
 	files {
+		
 		docs : {
 			#destination = {"${d_docs}\discount"};
 			{".\README.mkd"};
 		};
-		[x64, v100] {
-        	bin: {"x64\Release\*.dll"};
-        	//pdb: {x64\Release\*.pdb};
+		
+		mypdb: { 
+            // copies the whole folder tree.
+            #add-all-files : Items.discPdb;
+            // set the destination in the package itself. 
+			#destination : ${build_root}\${conditionFolder}\pdbs;
         };
-        [win32, v100]{
-        	bin: {"Win32\Release\*.dll"};
-        	//pdb: {"Win32\Release\*.pdb"};
+		
+		[x64, v100, Release] {
+        	bin:   x64\Release\discount.dll;
+        	mypdb: x64\Release\discount.pdb;
+        };
+		
+		[x64, v100, Debug] {
+        	bin:   x64\Debug\discount.dll;
+        	mypdb: x64\Debug\discount.pdb;
+        };
+        
+		[win32, v100, Release]{
+        	bin:   Win32\Release\discount.dll;
+        	mypdb: Win32\Release\discount.pdb;
         }
-    }
+		
+		[win32, v100, Debug]{
+        	bin:   Win32\Debug\discount.dll;
+        	mypdb: Win32\Debug\discount.pdb;
+        }
+    };
+	
+	targets {	
+		AfterBuild {
+			.Copy {
+				DestinationFolder = "$(TargetDir)";
+				SourceFiles = "@(discPdb)";
+				SkipUnchangedFiles = true;
+				UseHardlinksIfPossible = true;
+			};
+		};
+	};
 }
